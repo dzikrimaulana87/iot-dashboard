@@ -23,6 +23,8 @@ class SensorLocalDataSource {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         temperature REAL NOT NULL,
         humidity REAL NOT NULL,
+        status_temperature TEXT NOT NULL,
+        status_humidity TEXT NOT NULL,
         timestamp INTEGER NOT NULL
       )
     ''');
@@ -48,5 +50,10 @@ class SensorLocalDataSource {
     );
     if (list.isEmpty) return null;
     return SensorDataModel.fromMap(list[0]);
+  }
+
+  Future<void> deleteAll() async {
+    final db = await database;
+    await db.delete('sensor_data');
   }
 }

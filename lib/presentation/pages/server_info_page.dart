@@ -24,11 +24,7 @@ class ServerInfoPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text('Server Info'),
-        elevation: 0,
-        centerTitle: true,
-      ),
+      appBar: AppBar(elevation: 0, centerTitle: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -184,7 +180,8 @@ class ServerInfoPage extends StatelessWidget {
               methodColor: Colors.orange,
               endpoint: '/sensor',
               description: 'Submit sensor data',
-              example: '{"temperature": 25.5, "humidity": 60.0}',
+              example:
+                  '{"temperature": 25.5, "humidity": 60.0, "status_humidity": "lembab", "status_temperature":"panas"}',
               icon: Icons.upload_rounded,
             ),
 
@@ -199,6 +196,8 @@ class ServerInfoPage extends StatelessWidget {
               example: 'Returns ideal sensor config',
               icon: Icons.download_rounded,
             ),
+
+            const SizedBox(height: 50),
           ],
         ),
       ),

@@ -5,7 +5,17 @@ class SaveSensorData {
 
   SaveSensorData(this.repository);
 
-  Future<void> call(double temperature, double humidity) async {
-    await repository.saveSensorData(temperature, humidity);
+  Future<void> call(
+    double temperature,
+    double humidity,
+    String statusTemp,
+    String statusHum,
+  ) async {
+    await repository.saveSensorData(
+      temperature,
+      humidity,
+      statusTemp,
+      statusHum,
+    );
   }
 }

@@ -10,9 +10,6 @@ class ConfigPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Ideal Configuration')),
-      body: IdealConfigForm(configRepo: configRepo),
-    );
+    return Scaffold(body: IdealConfigForm(configRepo: configRepo));
   }
 }
