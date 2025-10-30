@@ -9,11 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mobile_iot/main.dart';
+import 'package:mobile_iot/data/datasources/local/sensor_local_data_source.dart';
+import 'package:mobile_iot/data/repositories/sensor_repository_impl.dart';
+import 'package:mobile_iot/data/datasources/server/http_server_manager.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    final sensorDataSource = SensorLocalDataSource();
+    final sensorRepo = SensorRepositoryImpl(sensorDataSource);
+    final server = HttpServerManager(sensorRepo);
+    await tester.pumpWidget(MyApp(server: server, sensorRepo: sensorRepo));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
