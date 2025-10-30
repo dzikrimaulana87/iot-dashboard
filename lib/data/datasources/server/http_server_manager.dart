@@ -24,10 +24,15 @@ class HttpServerManager {
       final json = jsonDecode(body);
       final temp = (json['temperature'] as num?)?.toDouble() ?? 0.0;
       final humidity = (json['humidity'] as num?)?.toDouble() ?? 0.0;
-      final statusHum = (json['status_humidity'] as String?) ?? 'unknown';
+      final statusHumidity = (json['status_humidity'] as String?) ?? 'unknown';
       final statusTemp = (json['status_temperature'] as String?) ?? 'unknown';
 
-      await _sensorRepo.saveSensorData(temp, humidity, statusTemp, statusHum);
+      await _sensorRepo.saveSensorData(
+        temp,
+        humidity,
+        statusTemp,
+        statusHumidity,
+      );
 
       return Response.ok('Data received');
     });

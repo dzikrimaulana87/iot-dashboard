@@ -21,7 +21,7 @@ class SensorRepositoryImpl implements SensorRepository {
       statusTemperature: statusTemperature,
       statusHumidity: statusHumidity,
       timestamp: DateTime.now(),
-      // Jika statusTemp/statusHum relevan, tambahkan field-nya di model
+      // Jika statusTemp/statusHumidity relevan, tambahkan field-nya di model
     );
 
     await _localDataSource.insert(sensorData);
@@ -58,14 +58,12 @@ class SensorRepositoryImpl implements SensorRepository {
   }
 
   /// Mengembalikan stream data sensor untuk digunakan pada StreamBuilder
-  @override
   Stream<List<SensorData>> watchAllSensorData() async* {
     // Jika data source tidak menyediakan stream, hanya emit data sekali
     yield await getAllSensorData();
   }
 
   /// Menghapus semua data sensor dari penyimpanan lokal
-  @override
   Future<void> deleteAllSensorData() async {
     await _localDataSource.deleteAll();
   }

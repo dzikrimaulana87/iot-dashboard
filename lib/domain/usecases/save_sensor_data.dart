@@ -9,13 +9,13 @@ class SaveSensorData {
     double temperature,
     double humidity,
     String statusTemp,
-    String statusHum,
+    String statusHumidity,
   ) async {
     await repository.saveSensorData(
       temperature,
       humidity,
       statusTemp,
-      statusHum,
+      statusHumidity,
     );
   }
 }
