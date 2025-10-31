@@ -20,21 +20,30 @@ class HttpServerManager {
 
     // Endpoint: POST /sensor → terima data suhu & kelembapan
     router.post('/sensor', (Request req) async {
-      final body = await req.readAsString();
-      final json = jsonDecode(body);
-      final temp = (json['temperature'] as num?)?.toDouble() ?? 0.0;
-      final humidity = (json['humidity'] as num?)?.toDouble() ?? 0.0;
-      final statusHumidity = (json['status_humidity'] as String?) ?? 'unknown';
-      final statusTemp = (json['status_temperature'] as String?) ?? 'unknown';
+      try {
+        final body = await req.readAsString();
+        final json = jsonDecode(body);
+        final temp = (json['temperature'] as num?)?.toDouble() ?? 0.0;
+        final humidity = (json['humidity'] as num?)?.toDouble() ?? 0.0;
 
-      await _sensorRepo.saveSensorData(
-        temp,
-        humidity,
-        statusTemp,
-        statusHumidity,
-      );
+        // Konversi status dari int/string ke string yang sesuai
+        String statusHumidity = _mapStatus(json['status_humidity']);
+        String statusTemp = _mapStatus(json['status_temperature']);
 
-      return Response.ok('Data received');
+        await _sensorRepo.saveSensorData(
+          temp,
+          humidity,
+          statusTemp,
+          statusHumidity,
+        );
+
+        return Response.ok('Data received');
+      } catch (e) {
+        print('[ERROR] Failed to process sensor data: $e');
+        return Response.internalServerError(
+          body: jsonEncode({'error': 'Failed to process data'}),
+        );
+      }
     });
 
     // Endpoint: GET /ideal → kirim konfigurasi ideal
@@ -55,6 +64,23 @@ class HttpServerManager {
     });
 
     return router;
+  }
+
+  // Helper function untuk mapping status
+  String _mapStatus(dynamic status) {
+    if (status == null) return 'unknown';
+
+    final statusStr = status.toString();
+    switch (statusStr) {
+      case '0':
+        return 'rendah'; // untuk humidity: kering, untuk temp: dingin
+      case '1':
+        return 'ideal'; // untuk humidity: ideal, untuk temp: normal
+      case '2':
+        return 'tinggi'; // untuk humidity: lembab, untuk temp: panas
+      default:
+        return 'unknown';
+    }
   }
 
   Future<void> startServer() async {
